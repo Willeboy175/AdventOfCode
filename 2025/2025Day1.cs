@@ -59,25 +59,29 @@ namespace AdventOfCode._2025
                 m = m.NextMatch();
             }
 
-            // loop length of lists
+            // Loop length of lists
             for (int i = 0; i < rotation.Count; i++)
             {
-                // Checks if rotation is 'L' or 'R'
+                //Console.WriteLine("Dial is: " + dial);
+
+                // Checks if rotation is 'L' or 'R' and then moves dial according to current step
                 if (rotation[i] == "L")
                 {
+                    //Console.WriteLine("Instruction: L" + distance[i]);
                     dial -= distance[i];
-                    //Console.WriteLine("Left " + distance[i]);
                 }
                 else if (rotation[i] == "R")
                 {
+                    //Console.WriteLine("Instruction: R" + distance[i]);
                     dial += distance[i];
-                    //Console.WriteLine("Right " + distance[i]);
                 }
-                //Console.WriteLine(dial);
 
-                // Loops dial around if it exceeds 0 or 99
+                // Loops dial around until it is between 0 and 99
                 while (dial > 99 || dial < 0)
                 {
+                    //Console.WriteLine("Out of bounds");
+                    //Console.WriteLine("Dial is: " + dial);
+
                     if (dial > 99)
                     {
                         dial -= 100;
@@ -87,13 +91,15 @@ namespace AdventOfCode._2025
                         dial += 100;
                     }
                 }
-                //Console.WriteLine(dial);
-
+                
                 // Adds 1 to password every time dial is 0
                 if (dial == 0)
                 {
-                    password += 1;
+                    ++password;
+                    //Console.WriteLine("At zero, Password: " + password);
                 }
+                //Console.WriteLine("Dial is: " + dial);
+                //Console.WriteLine();
             }
 
             Console.WriteLine("The password is: " + password);
@@ -105,7 +111,7 @@ namespace AdventOfCode._2025
             // Shorter set of instructions for testing
             // A pattern used for recognising one step of the instructions
             string input = File.ReadAllText("C:\\Users\\johnw\\Desktop\\Unity Projekt\\AdventOfCode\\2025\\Input2025Day1.txt");
-            string test = "R20\r\nR10\r\nL11\r\nR45\r\nR13\r\nR32\r\nR46\r\nL20\r\nL1\r\nL26\r\n";
+            string test = "R150\r\nL10\r\n"; //"R20\r\nR10\r\nL11\r\nR45\r\nR13\r\nR32\r\nR46\r\nL20\r\nL1\r\nL26\r\n";
             string pattern = @"([LR])([0-9]+)";
 
             // Dial to rotate according to the instructions that goes from 0 to 99 and starts 50
@@ -146,25 +152,48 @@ namespace AdventOfCode._2025
                 m = m.NextMatch();
             }
 
-            // loop length of lists
+            // Loop length of lists
             for (int i = 0; i < rotation.Count; i++)
             {
-                // Checks if rotation is 'L' or 'R'
+                //Console.WriteLine("Dial is: " + dial);
+
+                // Checks if rotation is 'L' or 'R' and then moves dial according to current step
                 if (rotation[i] == "L")
                 {
+                    //Console.WriteLine("Instruction: L" + distance[i]);
+                    
+                    if (dial == 0)
+                    {
+                        // Accounts for going left from zero so it does not add 1 extra to password
+                        --password;
+                        //Console.WriteLine("Started at zero, Password: " + password);
+                    }
                     dial -= distance[i];
-                    //Console.WriteLine("Left " + distance[i]);
                 }
                 else if (rotation[i] == "R")
                 {
+                    //Console.WriteLine("Instruction: R" + distance[i]);
                     dial += distance[i];
-                    //Console.WriteLine("Right " + distance[i]);
                 }
-                //Console.WriteLine(dial);
-
-                // Loops dial around if it exceeds 0 or 99
+                
+                // Loops dial around until it is between 0 and 99
                 while (dial > 99 || dial < 0)
                 {
+                    //Console.WriteLine("Out of bounds");
+                    //Console.WriteLine("Dial is: " + dial);
+
+                    // Adds 1 to password everytime it passes 0 and does not add one due to an edge case if dial is 100
+                    if (dial != 100)
+                    {
+                        ++password;
+                        //Console.WriteLine("Passed zero, Password: " + password);
+                    }
+                    else
+                    {
+                        //Console.WriteLine("Landed on 100");
+                    }
+
+                    // Adds or subtracts 100 if dial is out of bounds
                     if (dial > 99)
                     {
                         dial -= 100;
@@ -173,16 +202,17 @@ namespace AdventOfCode._2025
                     {
                         dial += 100;
                     }
-
-                    password += 1;
+                    //Console.WriteLine("Dial is: " + dial);
                 }
-                //Console.WriteLine(dial);
 
                 // Adds 1 to password every time dial is 0
                 if (dial == 0)
                 {
-                    password += 1;
+                    ++password;
+                    //Console.WriteLine("At zero, Password: " + password);
                 }
+                //Console.WriteLine("Dial is: " + dial);
+                //Console.WriteLine();
             }
 
             Console.WriteLine("The password is: " + password);
